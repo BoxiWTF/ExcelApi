@@ -47,33 +47,59 @@ public class Hoja {
         this.nFilas=nFilas;
         this.nColumnas=nColumnas;
     }
-
+    /**
+     * Metodo para acceder a un dato dada la fila y la columna
+     * @param fila
+     * @param columna
+     * @return 
+     */
     public String getDato(int fila, int columna) {
         return datos[fila][columna];
         
     }
-
+    /**
+     * Metodo para realizar un seteo de un dato en una celda dada la fila y la columna
+     * @param dato
+     * @param fila
+     * @param columna 
+     */
     public void setDato(String dato, int fila, int columna) {
         /*TO-DO manejar si accedemos a una posicion no valida*/
         this.datos[fila][columna] = dato;
     }
-    
+    /**
+     * Metodo para obtener el nombre de la hoja
+     * @return 
+     */
     public String getNombre(){
         return this.nombre;
     }
-    
+    /**
+     * Metodo para setear el nombre de la hoja
+     * @param nombre 
+     */
     public void setNombre(String nombre){
         this.nombre = nombre;
     }
-
+    /**
+     * Metodo para obtener el numero de filas
+     * @return 
+     */
     public int getnFilas() {
         return nFilas;
     }
-
+    /**
+     * Metodo para obtener el numero de columnas
+     * @return 
+     */
     public int getnColumnas() {
         return nColumnas;
     }
-    
+    /**
+     * Metodo para comparar dos hojas, pasandole una como parametro
+     * @param hoja
+     * @return 
+     */
     public boolean compare(Hoja hoja){
         boolean iguales = true;
         if(this.nColumnas==hoja.nColumnas && this.nFilas==hoja.nFilas && this.nombre==hoja.getNombre()){
