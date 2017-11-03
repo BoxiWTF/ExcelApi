@@ -5,10 +5,13 @@
  */
 package com.iesvdc.acceso.excelapi.excelapi;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,6 +23,7 @@ import static org.apache.poi.ss.usermodel.CellType.STRING;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  * Esta clase almacena información de libros para generar ficheros de Excel.
@@ -120,50 +124,55 @@ public class Libro {
     }
     /**
      * Metodo load, cuya funcion es leer una hoja de apache POI y pasarla a una hoja.java
+     * @throws ExcelAPIException
+     * @throws FileNotFoundException
+     * @throws IOException 
      */
-    /*public void load(){
-        File file =  new File(getNombreArchivo());
-        FileInputStream fileEntrada = new FileInputStream(file);
-        try {
-            fileEntrada.close();
-        } catch (IOException ex) {
-            Logger.getLogger(Libro.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        SXSSFWorkbook wb = new SXSSFWorkbook(fileEntrada);
-        for(int i = 0; i < wb.getSheets(); i++){
-            Sheet sh = wb.getSheetAt(i);
-            int filas = sh.getRows();
-            int columnas = 0;
-            for(int j = 0; j < filas; j++){
-                if(columnas < sh.getCells()){
-                    columnas = sh.getCells();
-                }
-                Hoja hoja = new Hoja(sh.getName,filas,columnas);
-                for(int k = 0; k < filas; k++){
-                    Row row = sh.getRow(k);
-                    for(int z = 0; z < columnas; z++){
-                        Cell cell = sh.getCell(z);
-                        switch (cell.getCellType()){
-                            case STRING: 
-                                hoja.setDato(cell.getStringCellValue(),k,z);
-                                break;
-                            case NUMERIC:
-                                hoja.setDato(cell.getStringCellValue(),k,z);
-                                break;
-                            case FORMULA:
-                                hoja.setDato(cell.getStringCellValue(),k,z);
-                                break;
-                            case BOOLEAN:
-                                hoja.setDato(cell.getStringCellValue(),k,z);
-                                break;
-                            default:
-                                hoja.setDato("",i,j);
-                        }
+    public void load()throws ExcelAPIException, FileNotFoundException, IOException{
+        Hoja hoja;
+        int numeroFilas=0;
+        int numeroColumnas=0;
+        Row row;
+        Row row2;
+        Cell cell;
+        Cell cell2;
+        FileInputStream fileEntrada = new FileInputStream(new File(getNombreArchivo()));
+        XSSFWorkbook wb = new XSSFWorkbook(fileEntrada);
+        for(Sheet sheet: wb){
+            Iterator<Row> rowIterator = sheet.iterator();
+            while (rowIterator.hasNext()){
+                numeroFilas++;
+               row = rowIterator.next(); 
+               Iterator<Cell> cellIterator = row.cellIterator();
+               while (cellIterator.hasNext()){
+                   numeroColumnas++;
+                   cell = cellIterator.next();
+               }
+            }
+            hoja = new Hoja(sheet.getSheetName(),numeroFilas,numeroColumnas);
+            for(int i=0;i<numeroFilas;i++){
+                row2 = sheet.getRow(i);
+                for(int j=0;j<numeroColumnas;j++){
+                    cell2 = row2.getCell(j);
+                    switch(cell2.getCellTypeEnum()){
+                        case STRING:
+                            hoja.setDato(cell2.getStringCellValue(),i,j);
+                            break;
+                        case NUMERIC:
+                            hoja.setDato(cell2.getNumericCellValue()+"",i,j);
+                            break;
+                        case FORMULA:
+                            hoja.setDato(cell2.getCellFormula(),i,j);
+                            break;
+                        case BOOLEAN:
+                            hoja.setDato(cell2.getBooleanCellValue()+"", i, j);
+                        default:
+                           hoja.setDato("",i,j); 
                     }
                 }
             }
         }
-    }*/
+    }
     
     /**
      * Metodo load al que se le pasa el nombre del archivo

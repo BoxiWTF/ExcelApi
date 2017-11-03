@@ -5,6 +5,7 @@
  */
 package com.iesvdc.acceso.excelapi.excelapi;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -183,14 +184,20 @@ public class LibroTest {
     /**
      * Test of load method, of class Libro.
      */
-    /*@Test
+    @Test
     public void testLoad_0args() {
-        System.out.println("load");
-        Libro instance = new Libro();
-        instance.load();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
+        try {
+            System.out.println("load");
+            Libro instance = new Libro();
+            instance.load();
+            // TODO review the generated test code and remove the default call to fail.
+            //fail("The test case is a prototype.");
+        } catch (ExcelAPIException ex) {
+            Logger.getLogger(LibroTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(LibroTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * Test of load method, of class Libro.
